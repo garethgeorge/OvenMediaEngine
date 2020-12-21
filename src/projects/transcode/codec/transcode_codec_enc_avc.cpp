@@ -80,7 +80,7 @@ bool OvenCodecImplAvcodecEncAVC::Configure(std::shared_ptr<TranscodeContext> con
 	_context->profile = FF_PROFILE_H264_BASELINE;
 
 	// 인코딩 성능
-	::av_opt_set(_context->priv_data, "preset", "ultrafast", 0);
+	::av_opt_set(_context->priv_data, "preset", "fast", 0);
 
 	// 인코딩 딜레이
 	::av_opt_set(_context->priv_data, "tune", "zerolatency", 0);
