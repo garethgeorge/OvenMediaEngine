@@ -72,21 +72,23 @@ bool OvenCodecImplAvcodecEncAVC::Configure(std::shared_ptr<TranscodeContext> con
 	_context->pix_fmt = AV_PIX_FMT_YUV420P;
 	_context->width = _output_context->GetVideoWidth();
 	_context->height = _output_context->GetVideoHeight();
-	_context->thread_count = 2;
+	_context->thread_count = 8;
+    _context->thread_type = FF_THREAD_FRAME;
+
 
 	// 인코딩 품질 및 브라우저 호환성
 	// For browser compatibility
 	// _context->profile = FF_PROFILE_H264_MAIN;
-	_context->profile = FF_PROFILE_H264_BASELINE;
+	_context->profile = FF_PROFILE_H264_HIGH;
 
 	// 인코딩 성능
-	::av_opt_set(_context->priv_data, "preset", "fast", 0);
+	::av_opt_set(_context->priv_data, "preset", "slow", 0);
 
 	// 인코딩 딜레이
-	::av_opt_set(_context->priv_data, "tune", "zerolatency", 0);
+	// ::av_opt_set(_context->priv_data, "tune", "zerolatency", 0);
 
 	// 인코딩 딜레이에서 sliced-thread 옵션 제거. MAC 환경에서 브라우저 호환성
-	::av_opt_set(_context->priv_data, "x264opts", "bframes=0:sliced-threads=0:b-adapt=1:no-scenecut:keyint=30:min-keyint=30", 0);
+	::av_opt_set(_context->priv_data, "x264opts", "bframes=0:sliced-threads=0:b-adapt=1:no-scenecut:keyint=90:min-keyint=90", 0);
 	// ::av_opt_set(_context->priv_data, "x264opts", "bframes=0:sliced-threads=0:b-adapt=1", 0);
 
 	// CBR 옵션 / bitrate는 kbps 단위 / *문제는 MAC 크롬에서 재생이 안된다. 그래서 maxrate 값만 지정해줌.
